@@ -8,6 +8,7 @@ import net.jini.core.entry.Entry;
 public class Bid implements Entry {
 	
 	
+	public Integer id=2;
 	public AuctionUser bidder;
 	public Lot	lotBidded;
 	public Integer amountBidded;

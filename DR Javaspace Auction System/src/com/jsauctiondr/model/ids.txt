@@ -1,0 +1,4 @@
+Users 1   Indexer 2
+Bids 4    Indexer 5
+Lots 6    Indexer 7
+

@@ -4,6 +4,9 @@ import net.jini.core.entry.Entry;
 
 
 public class Lot implements Entry {
+	
+	
+	
 
 	public Lot() {
 
