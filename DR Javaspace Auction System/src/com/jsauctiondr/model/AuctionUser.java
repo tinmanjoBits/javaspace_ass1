@@ -5,6 +5,8 @@ import net.jini.core.entry.Entry;
 
 public class AuctionUser implements Entry {
 	
+	
+	public Integer id=1;
 	public String username;
 	public String password;
 	public Integer totalBids;
