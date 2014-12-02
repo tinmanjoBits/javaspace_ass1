@@ -1,9 +1,13 @@
 
 package com.jsauctiondr.util;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.SwingUtilities;
 
 import com.jsauctiondr.model.AuctionUser;
+import com.jsauctiondr.model.GenericIndexer;
 
 import net.jini.space.JavaSpace;
 
@@ -20,8 +24,8 @@ public class JavaSpaceTest {
 
 		// testSpace();
 		testReadWrite();
-		testTransactionsReadWrite();
-		testTransactionsIntermittantTake();
+		// testTransactionsReadWrite();
+		// testTransactionsIntermittantTake();
 		testAddingRemovingEntries();
 		testNotifyAdding();
 		testNotifyRemoved();
@@ -42,14 +46,77 @@ public class JavaSpaceTest {
 
 	private void testAddingRemovingEntries() {
 
-		// TODO Auto-generated method stub
+		Random rnd = new Random();
+
+		GenericIndexer userIndexer = new GenericIndexer("users111122");
+		GenericIndexer tmpIndexer = new GenericIndexer(userIndexer.indexerName);
+
+		// ArrayList<AuctionUser> usersList=new ArrayList<AuctionUser>();
+
+		// write indexer
+		entMgr.writeEntry(userIndexer, Long.MAX_VALUE);
+
+		// add users to array
+		for (int i = 0; i < 10; i++) {
+
+			// get indexer
+			GenericIndexer result = (GenericIndexer) entMgr.takeEntry(tmpIndexer, 4000l);
+			System.out.println("\nTake the indexer:" + result.indexerName + ", " + result.indexerLength);
+
+			// add user index, name etc..
+			user.index = result.incrementIndex();
+			user.username = String.valueOf("user:" + rnd.nextInt() + "|" + user.index);
+			user.indexer = result.indexerName;
+			System.out.println("User created ready to write:" + user.indexer + ", " + user.username);
+
+			// write indexer
+			entMgr.writeEntry(result, Long.MAX_VALUE);
+			System.out.println("Write the indexer:" + result.indexerName + ", " + result.indexerLength);
+
+			// write user
+			entMgr.writeEntry(user, Long.MAX_VALUE);
+			System.out.println("User written to space:" + user.indexer + ", " + user.username + "\n");
+
+		}
+
+		System.out.println("\n User indexer and users written to space :PASS");
+
+		System.out.println("Attempting retrieval of users,  last counted(" + user.index + ")");
+
+		result =null;
+		
+		for (int i = 0; i < 10; i++) {
+
+			// get indexer
+			GenericIndexer result = (GenericIndexer) entMgr.takeEntry(tmpIndexer, 4000l);
+			System.out.println("\nTake the indexer:" + result.indexerName + ", " + result.indexerLength);
+
+			
+			
+			
+			// set user index, name etc..
+			user.index = result.decrementIndex();
+			user.indexer = result.indexerName;
+			System.out.println("User set ready to take:" + user.indexer + ", " + user.username);
+
+			// write indexer
+			entMgr.writeEntry(result, Long.MAX_VALUE);
+			System.out.println("Write the indexer:" + result.indexerName + ", " + result.indexerLength);
+
+			// take user
+			entMgr.writeEntry(user, Long.MAX_VALUE);
+			System.out.println("User removed from space:" + user.indexer + ", " + user.username + "\n");
+
+		}
+		
+		
+		System.out.println("Removed all users, last("+user.index+")");
 
 	}
 
 	private void testTransactionsIntermittantTake() {
 
-		System.out
-				.println("\nJavaspace test transaction failed due intermittant system takes...");
+		System.out.println("\nJavaspace test transaction failed due intermittant system takes...");
 
 		AuctionUser result = null;
 		user.username = "userTransFail";
@@ -65,25 +132,21 @@ public class JavaSpaceTest {
 		}
 
 		EntryManager tmpEntryManager = new EntryManager(space);
-		AuctionUser resultFailed = (AuctionUser) tmpEntryManager
-				.takeEntryTransaction(userTmp, 4000l);
+		AuctionUser resultFailed = (AuctionUser) tmpEntryManager.takeEntryTransaction(userTmp, 4000l);
 
 		result = (AuctionUser) entMgr.takeEntryTransaction(userTmp, 4000l);
 
 		if (resultFailed == null && result != null) {
-			System.out
-					.println("Javaspace intermitant take test with transaction: PASS");
+			System.out.println("Javaspace intermitant take test with transaction: PASS");
 		} else {
-			System.out
-					.println("Javaspace intermitant take test with transaction: FAIL");
+			System.out.println("Javaspace intermitant take test with transaction: FAIL");
 		}
 
 	}
 
 	private void testTransactionsReadWrite() {
 
-		System.out
-				.println("\nTesting Javaspace write and take with transaction... ");
+		System.out.println("\nTesting Javaspace write and take with transaction... ");
 		result = null;
 		user.username = "userTrans";
 
@@ -100,24 +163,21 @@ public class JavaSpaceTest {
 		result = (AuctionUser) entMgr.takeEntryTransaction(userTmp, 4000l);
 
 		if (result != null) {
-			System.out
-					.println("Javaspace reclaimed entry with transaction: PASS");
+			System.out.println("Javaspace reclaimed entry with transaction: PASS");
 		} else {
-			System.out
-					.println("Javaspace reclaimed entry with transaction: FAILED");
+			System.out.println("Javaspace reclaimed entry with transaction: FAILED");
 		}// TODO Auto-generated method stub
 
 	}
 
 	private void testReadWrite() {
 
-		EntryManager entMgr = new EntryManager(space);
+		entMgr = new EntryManager(space);
 
 		userTmp = new AuctionUser();
 		user = new AuctionUser("userNorm", "meme");
 
-		System.out
-				.println("Testing Javaspace write and take with no transactions...");
+		System.out.println("Testing Javaspace write and take with no transactions...");
 
 		entMgr.writeEntry(userTmp, Long.MAX_VALUE);
 		System.out.println("Javaspace writen to : PASS");
