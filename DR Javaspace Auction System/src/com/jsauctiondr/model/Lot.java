@@ -6,7 +6,7 @@ import net.jini.core.entry.Entry;
 public class Lot extends AbstractIndexedEntry implements Entry {
 	
 	
-	public Integer id=6;
+	
 	public AuctionUser seller;
 	public String itemTitle;
 	public String itemDesc;

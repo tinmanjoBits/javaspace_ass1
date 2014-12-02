@@ -3,7 +3,7 @@ package com.jsauctiondr.model;
 import net.jini.core.entry.Entry;
 
 
-public class AbstractIndexedEntry implements Entry {
+public class AbstractIndexedEntry extends AbstractEntry implements Entry {
 	
 	
 	

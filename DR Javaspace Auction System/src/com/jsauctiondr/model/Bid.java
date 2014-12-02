@@ -8,7 +8,7 @@ import net.jini.core.entry.Entry;
 public class Bid extends AbstractIndexedEntry implements Entry {
 	
 	
-	public Integer id=4;
+	
 	public AuctionUser bidder;
 	public Lot	lotBidded;
 	public Integer amountBidded;
