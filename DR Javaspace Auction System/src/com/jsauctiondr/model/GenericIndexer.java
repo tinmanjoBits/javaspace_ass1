@@ -17,18 +17,30 @@ public class GenericIndexer implements Entry {
 	public GenericIndexer(String name) {
 
 		this.indexerName = name;
-		this.indexerLength = new Integer(0);
+		//this.indexerLength = new Integer(0);
 	}
 
 	public Integer incrementIndex() {
+
+		if (this.indexerLength == null) {
+			this.indexerLength = new Integer(1);
+			return this.indexerLength;
+		} else {
+
+			this.indexerLength = new Integer(this.indexerLength + 1);
+			return this.indexerLength;
+		}
+	}
+	
+	public Integer decrementIndex() {
 
 		if (this.indexerLength == null) {
 			this.indexerLength = new Integer(0);
 			return this.indexerLength;
 		} else {
 
-			this.indexerLength = new Integer(this.indexerLength + 1);
-			return this.indexerLength;
+			this.indexerLength = new Integer(this.indexerLength -1);
+			return this.indexerLength+1;
 		}
 	}
 
