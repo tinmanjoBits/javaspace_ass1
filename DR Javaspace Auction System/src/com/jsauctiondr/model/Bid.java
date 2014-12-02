@@ -5,7 +5,7 @@ import java.util.Date;
 import net.jini.core.entry.Entry;
 
 
-public class Bid implements Entry {
+public class Bid extends AbstractIndexedEntry implements Entry {
 	
 	
 	public Integer id=4;
