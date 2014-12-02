@@ -12,7 +12,7 @@ public class JavaSpaceTest {
 		JavaSpace space;
 		space = SpaceUtils.getSpace();
 
-		System.out.println("Javaspace found and accessed: PASS");
+		System.out.println("Javaspace found and accessed: PASS \n");
 		EntryManager entMgr = new EntryManager(space);
 
 		AuctionUser userTmp = new AuctionUser();
@@ -38,7 +38,7 @@ public class JavaSpaceTest {
 			System.out.println("Javaspace reclaimed entry: FAILED");
 		}
 
-		System.out.println("Testing Javaspace write and take with transaction... ");
+		System.out.println("\nTesting Javaspace write and take with transaction... ");
 		result = null;
 		user.username="userTrans";	
 		
@@ -62,7 +62,7 @@ public class JavaSpaceTest {
 		}
 		
 		
-		System.out.println("Javaspace test transaction failed due intermittant system takes...");
+		System.out.println("\nJavaspace test transaction failed due intermittant system takes...");
 		
 		result = null;
 		user.username="userTransFail";	
@@ -78,13 +78,13 @@ public class JavaSpaceTest {
 			e.printStackTrace();
 		}
 		
-		
-		AuctionUser resultFailed=(AuctionUser) entMgr.takeEntry(userTmp, 4000l);
+		EntryManager tmpEntryManager=new EntryManager(space);
+		AuctionUser resultFailed=(AuctionUser) tmpEntryManager.takeEntryTransaction(userTmp, 4000l);
 		
 		
 		result=(AuctionUser) entMgr.takeEntryTransaction(userTmp, 4000l);
 		
-		if(resultFailed == null){
+		if(resultFailed == null && result !=null){
 			System.out.println("Javaspace intermitant take test with transaction: PASS");
 		}else{
 			System.out.println("Javaspace intermitant take test with transaction: FAIL");
