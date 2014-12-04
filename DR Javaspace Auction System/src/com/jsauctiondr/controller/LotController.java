@@ -2,6 +2,8 @@ package com.jsauctiondr.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import net.jini.space.JavaSpace;
 
@@ -10,7 +12,7 @@ import com.jsauctiondr.util.EntryManager;
 import com.jsauctiondr.view.AuctionPanel;
 
 
-public class LotController {
+public class LotController implements Observer {
 	
 	AuctionPanel lotPanel;
 	JavaSpace space;
@@ -22,15 +24,7 @@ public class LotController {
 		this.space = space;
 		
 		
-		lotPanel.btnAddLot.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			
-				createLot();
-				
-			}
-		});
+		
 	}
 	
 	
@@ -41,7 +35,15 @@ public class LotController {
 		
 		Lot lotTmp=new Lot();
 		
-		if(lotPanel.panelLots)
+		
+		
+	}
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		// TODO Auto-generated method stub
 		
 	}
 	
